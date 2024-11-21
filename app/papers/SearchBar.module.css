@@ -1,0 +1,19 @@
+/* app/papers/SearchBar.module.css */
+.datePicker [class*="mantine-DatePickerInput-calendarHeader"] button {
+    width: 24px;
+    height: 24px;
+    margin: 0 2px;
+  }
+  
+  .datePicker [class*="mantine-DatePickerInput-calendarHeader"] button svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .datePicker [class*="mantine-DatePickerInput-input"] {
+    min-height: 36px;
+  }
+  
+  .searchInput input::placeholder {
+    color: var(--mantine-color-gray-6);
+  }
