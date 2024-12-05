@@ -13,7 +13,7 @@ export type Paper = {
   keywords: string[];
   url: string;
   affiliations: string[];
-}
+};
 
 export interface SearchTerms {
   titleTerms: string[];
@@ -34,9 +34,9 @@ export const getJournals = async (): Promise<string[]> => {
   const results = await prisma.paper.findMany({
     select: { journal: true },
     distinct: ['journal'],
-    orderBy: { journal: 'asc' }
+    orderBy: { journal: 'asc' },
   });
-  
+
   return results.map((result) => result.journal);
 };
 
@@ -48,7 +48,7 @@ export const getPapers = async (filters: SearchFilters) => {
     sortBy,
     journal,
     startDate,
-    endDate
+    endDate,
   } = filters;
 
   try {
@@ -57,70 +57,70 @@ export const getPapers = async (filters: SearchFilters) => {
 
     // Handle title/abstract/keyword search terms
     if (searchTerms.titleTerms.length > 0) {
-      const titleConditions = searchTerms.titleTerms.map(term => ({
+      const titleConditions = searchTerms.titleTerms.map((term) => ({
         OR: [
           { title: { contains: term, mode: 'insensitive' } },
           { abstract: { contains: term, mode: 'insensitive' } },
-          { keywords: { hasSome: [term] } }
-        ]
+          { keywords: { hasSome: [term] } },
+        ],
       }));
       conditions.push(...titleConditions);
     }
 
-    // author search
+    // Handle author search
     let authorMatches: string[] = [];
     if (searchTerms.authorTerms.length > 0) {
       const allPapers = await prisma.paper.findMany({
-        select: { authors: true }
+        select: { authors: true },
       });
-      
-      const searchTermsLower = searchTerms.authorTerms.map(term => term.toLowerCase());
-      
+
+      const searchTermsLower = searchTerms.authorTerms.map((term) => term.toLowerCase());
+
       // Create a Set of matching authors and convert to array
       const matchingAuthorsSet = new Set<string>();
-      allPapers.forEach(paper => {
-        paper.authors.forEach(author => {
-          if (searchTermsLower.some(term => author.toLowerCase().includes(term))) {
+      allPapers.forEach((paper) => {
+        paper.authors.forEach((author) => {
+          if (searchTermsLower.some((term) => author.toLowerCase().includes(term))) {
             matchingAuthorsSet.add(author);
           }
         });
       });
-      
-      // convert set to array 
+
+      // Convert Set to Array without spread operator
       authorMatches = Array.from(matchingAuthorsSet);
-      
+
       if (authorMatches.length > 0) {
         conditions.push({
           authors: {
-            hasSome: authorMatches
-          }
+            hasSome: authorMatches,
+          },
         });
       }
     }
 
-    // journal filter
+    // Handle journal filter
     if (journal) {
       conditions.push({
-        journal: { equals: journal, mode: 'insensitive' }
+        journal: { equals: journal, mode: 'insensitive' },
       });
     }
 
-    // date range
+    // Handle date range
     if (startDate || endDate) {
       const dateFilter: any = {};
       if (startDate) dateFilter.gte = new Date(startDate);
       if (endDate) dateFilter.lte = new Date(endDate);
       conditions.push({
-        pub_date: dateFilter
+        pub_date: dateFilter,
       });
     }
 
-    // combine all conditions with AND
+    // Combine all conditions with AND
     if (conditions.length > 0) {
       where.AND = conditions;
     }
 
-    // build sort options
+    // Build sort options
     const orderBy = (() => {
       switch (sortBy) {
         case 'pub_date_asc':
@@ -136,7 +136,7 @@ export const getPapers = async (filters: SearchFilters) => {
       }
     })();
 
-    // execute queries
+    // Execute queries
     const [papers, total] = await Promise.all([
       prisma.paper.findMany({
         take: limit,
@@ -154,16 +154,16 @@ export const getPapers = async (filters: SearchFilters) => {
           pub_date: true,
           keywords: true,
           url: true,
-          affiliations: true
-        }
+          affiliations: true,
+        },
       }),
-      prisma.paper.count({ where })
+      prisma.paper.count({ where }),
     ]);
 
     return {
       papers,
       total,
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     };
   } catch (error) {
     console.error('Error in getPapers:', error);
@@ -174,27 +174,27 @@ export const getPapers = async (filters: SearchFilters) => {
 export function parseSearchQuery(searchQuery: string): SearchTerms {
   const terms: SearchTerms = {
     titleTerms: [],
-    authorTerms: []
+    authorTerms: [],
   };
 
   if (!searchQuery) return terms;
 
   try {
-    // split search query by semicolon to separate different search components
-    const components = searchQuery.split(';').map(comp => comp.trim());
+    // Split the search query by semicolon to separate different search components
+    const components = searchQuery.split(';').map((comp) => comp.trim());
 
-    components.forEach(component => {
+    components.forEach((component) => {
       if (!component) return;
 
-      // check for author: prefix
+      // Check for author: prefix
       if (component.toLowerCase().startsWith('author:')) {
-        // extract everything after "author:" 
+        // Extract everything after "author:" and split by spaces
         const authorPart = component.substring(7).trim();
         if (authorPart) {
           terms.authorTerms.push(...authorPart.split(/\s+/).filter(Boolean));
         }
       } else {
-        // If no author treat as title/general search terms
+        // If no author: prefix, treat as title/general search terms
         terms.titleTerms.push(...component.split(/\s+/).filter(Boolean));
       }
     });
@@ -204,7 +204,7 @@ export function parseSearchQuery(searchQuery: string): SearchTerms {
     console.error('Error parsing search query:', error);
     return {
       titleTerms: [],
-      authorTerms: []
+      authorTerms: [],
     };
   }
 }
@@ -212,7 +212,7 @@ export function parseSearchQuery(searchQuery: string): SearchTerms {
 export const getPaper = async (slug: string): Promise<Paper | null> => {
   try {
     return await prisma.paper.findUnique({
-      where: { slug }
+      where: { slug },
     });
   } catch (error) {
     console.error('Error fetching paper:', error);

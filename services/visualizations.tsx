@@ -6,23 +6,27 @@ interface DateFilter {
   lte?: Date;
 }
 
-export async function getVisualizationData(type: string, limit: number, dateFilter: DateFilter = {}) {
+export async function getVisualizationData(
+  type: string,
+  limit: number,
+  dateFilter: DateFilter = {}
+) {
   let data: any[] = [];
 
   switch (type) {
     case 'keywords':
       const papers = await prisma.paper.findMany({
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         select: {
-          keywords: true
-        }
+          keywords: true,
+        },
       });
 
       const keywordCounts = new Map<string, number>();
-      papers.forEach(paper => {
-        paper.keywords.forEach(keyword => {
+      papers.forEach((paper) => {
+        paper.keywords.forEach((keyword) => {
           keywordCounts.set(keyword, (keywordCounts.get(keyword) || 0) + 1);
         });
       });
@@ -37,17 +41,17 @@ export async function getVisualizationData(type: string, limit: number, dateFilt
       const journalCounts = await prisma.paper.groupBy({
         by: ['journal'],
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         _count: {
-          journal: true
-        }
+          journal: true,
+        },
       });
 
       data = journalCounts
-        .map(item => ({
+        .map((item) => ({
           name: item.journal,
-          value: item._count.journal
+          value: item._count.journal,
         }))
         .sort((a, b) => b.value - a.value)
         .slice(0, limit);
@@ -56,16 +60,16 @@ export async function getVisualizationData(type: string, limit: number, dateFilt
     case 'authors':
       const authorPapers = await prisma.paper.findMany({
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         select: {
-          authors: true
-        }
+          authors: true,
+        },
       });
 
       const authorCounts = new Map<string, number>();
-      authorPapers.forEach(paper => {
-        paper.authors.forEach(author => {
+      authorPapers.forEach((paper) => {
+        paper.authors.forEach((author) => {
           authorCounts.set(author, (authorCounts.get(author) || 0) + 1);
         });
       });
@@ -79,18 +83,18 @@ export async function getVisualizationData(type: string, limit: number, dateFilt
     case 'timeline':
       const timelinePapers = await prisma.paper.findMany({
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         select: {
-          pub_date: true
+          pub_date: true,
         },
         orderBy: {
-          pub_date: 'asc'
-        }
+          pub_date: 'asc',
+        },
       });
 
       const timelineCounts = new Map<string, number>();
-      timelinePapers.forEach(paper => {
+      timelinePapers.forEach((paper) => {
         const date = paper.pub_date;
         const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         timelineCounts.set(key, (timelineCounts.get(key) || 0) + 1);
@@ -133,25 +137,25 @@ export async function getRelatedPapers(type: string, value: string) {
       papers = await prisma.paper.findMany({
         where: {
           keywords: {
-            has: value
-          }
+            has: value,
+          },
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
       break;
 
     case 'journals':
       papers = await prisma.paper.findMany({
         where: {
-          journal: value
+          journal: value,
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
       break;
 
@@ -159,13 +163,13 @@ export async function getRelatedPapers(type: string, value: string) {
       papers = await prisma.paper.findMany({
         where: {
           authors: {
-            has: value
-          }
+            has: value,
+          },
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
       break;
 
@@ -178,13 +182,13 @@ export async function getRelatedPapers(type: string, value: string) {
         where: {
           pub_date: {
             gte: startDate,
-            lte: endDate
-          }
+            lte: endDate,
+          },
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
       break;
 
