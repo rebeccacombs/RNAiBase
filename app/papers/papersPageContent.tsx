@@ -37,28 +37,13 @@ export default function PapersPageContent() {
   );
 
   const handleSearch = React.useCallback(async (params: URLSearchParams) => {
-    // Check cache first
-    if (cacheRef.current) {
-      console.log('Using cached data');
-      setPapers(cacheRef.current.papers);
-      setTotal(cacheRef.current.total);
-      setLoading(false);
-      return;
-    }
-
-    // Fetch data if not in cache
     setLoading(true);
     try {
       const response = await fetch(`/api/papers?${params.toString()}`);
       if (!response.ok) throw new Error('Failed to fetch papers');
       const data = await response.json();
 
-      // Cache the fetched data
-      cacheRef.current = {
-        papers: data.papers || [],
-        total: data.total || 0,
-      };
-
+      // Update state without relying on the cache
       setPapers(data.papers || []);
       setTotal(data.total || 0);
     } catch (error) {
