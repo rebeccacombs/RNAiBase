@@ -1,26 +1,19 @@
+/* Flex Containers */
 .flexContainer {
   display: flex;
   justify-content: space-between;
-  /* Distribute space between title/logo and toggle button */
   align-items: center;
-  /* Vertically center the elements */
   width: 100%;
-  /* Full width */
 }
 
 .titleContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Center the logo and title horizontally */
-  gap: rem(20px);
-  /* Space between logo and title */
+  gap: 1.25rem; /* Converted rem(20px) to rem */
   flex-shrink: 0;
-  /* Prevent shrinking */
   min-width: 300px;
-  /* Optional: Add a minimum width */
-  margin: 0 auto;
-  /* Center the titleContainer */
+  flex: 1; /* Improved spacing flexibility */
 }
 
 .itemRight {
@@ -37,72 +30,61 @@
 }
 
 .hyperlink {
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  
+  color: var(--mantine-color-black, black);
 }
 
 .logo {
-  stroke: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
+  stroke: var(--logo-stroke-light, #052049);
 }
 
 .tag {
-  color: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
+  color: var(--logo-stroke-light, #052049);
 }
 
 .title {
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  font-size: rem(100px);
+  color: var(--mantine-color-black, black);
+  font-size: 6.25rem; /* Converted rem(100px) */
   font-weight: 900;
-  letter-spacing: rem(-2px);
+  letter-spacing: -0.125rem; /* Converted rem(-2px) */
 }
 
-
-.spaceFont {
-  font-family: var(--font-space-grotesk);
-  font-weight: 400;
-  font-style: normal;
-}
-
-.regularFont {
+/* Typography */
+.spaceFont, .regularFont, .boldFont, .italicFont, .lightFont {
   font-family: var(--font-logika);
-  font-weight: 400;
   font-style: normal;
 }
 
 .boldFont {
-  font-family: var(--font-logika);
   font-weight: 800;
-  font-style: normal;
 }
 
 .italicFont {
-  font-family: var(--font-logika);
   font-weight: 700;
   font-style: italic;
 }
 
 .lightFont {
-  font-family: var(--font-logika);
   font-weight: 400;
-  font-style: normal;
 }
 
 .heading1 {
-  font-size: rem(30px);
+  font-size: 1.875rem; /* Converted rem(30px) */
 }
 
 .heading2 {
-  font-size: rem(20px);
+  font-size: 1.25rem; /* Converted rem(20px) */
 }
 
+/* Group Container */
 .groupContainer {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
-  gap: 20px; 
-  padding: 20px; 
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
 }
 
+/* Cards */
 .card {
   width: 300px;
   height: 300px;
@@ -110,43 +92,50 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start; 
-  padding: 24px; 
-  transition: transform 0.3s; 
+  align-items: flex-start;
+  padding: 24px;
+  transition: transform 0.3s;
+  will-change: transform; /* Improved performance */
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .cardIconContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; 
+  width: 100%;
   height: 180px;
+  flex-shrink: 0; /* Prevent content overlap */
 }
 
 .cardIcon {
-  max-width: 100%; 
-  height: auto; 
+  max-width: 100%;
+  height: auto;
 }
 
 .arrowContainer {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   width: 48px;
   height: 48px;
 }
 
 .cardText {
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
   font-family: var(--font-logika);
   font-weight: 800;
   color: inherit;
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 .cardTextWhite {
-  color: white; 
+  color: white;
 }
 
 .cardLink {
-  text-decoration: none; 
+  text-decoration: none;
 }

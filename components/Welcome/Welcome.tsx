@@ -9,6 +9,7 @@ import { Tag } from './Tag';
 import classes from './Welcome.module.css';
 
 export function Welcome() {
+  
   return (
     <>
       <div className={classes.flexContainer}>
