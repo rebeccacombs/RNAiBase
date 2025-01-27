@@ -1,16 +1,17 @@
 import '@mantine/core/styles.css';
 
 import React from 'react';
+import { Space_Grotesk } from 'next/font/google';
+import localFont from 'next/font/local';
+import { Analytics } from '@vercel/analytics/react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
-import { Space_Grotesk } from 'next/font/google'
-import localFont from "next/font/local";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-space-grotesk',
-})
+});
 
 const logika = localFont({
   src: [
@@ -31,14 +32,13 @@ const logika = localFont({
     },
     {
       path: '/fonts/LogikaNova-Light.woff2',
-      weight: '300', 
+      weight: '300',
       style: 'light',
     },
   ],
-  variable: '--font-logika',  
+  variable: '--font-logika',
   display: 'swap',
 });
-
 
 export const metadata = {
   title: 'RNAiBase',
@@ -47,9 +47,14 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: any }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${logika.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${spaceGrotesk.variable} ${logika.variable}`}
+    >
       <head>
         <ColorSchemeScript />
+        <Analytics />
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta
           name="viewport"
@@ -57,9 +62,15 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-      <MantineProvider theme={{...theme, 
-      fontFamily: 'var(--font-logika)', headings: { fontFamily: 'var(--font-space-grotesk)' }}}>
-            {children}</MantineProvider>
+        <MantineProvider
+          theme={{
+            ...theme,
+            fontFamily: 'var(--font-logika)',
+            headings: { fontFamily: 'var(--font-space-grotesk)' },
+          }}
+        >
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );
