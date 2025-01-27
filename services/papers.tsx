@@ -31,13 +31,18 @@ export interface SearchFilters {
 }
 
 export const getJournals = async (): Promise<string[]> => {
-  const results = await prisma.paper.findMany({
-    select: { journal: true },
-    distinct: ['journal'],
-    orderBy: { journal: 'asc' },
-  });
+  try {
+    const results = await prisma.paper.findMany({
+      select: { journal: true },
+      distinct: ['journal'],
+      orderBy: { journal: 'asc' },
+    });
 
-  return results.map((result) => result.journal);
+    return results.map((result) => result.journal);
+  } catch (error) {
+    console.error('Error fetching journals:', error);
+    throw new Error('Failed to fetch journals');
+  }
 };
 
 export const getPapers = async (filters: SearchFilters) => {
