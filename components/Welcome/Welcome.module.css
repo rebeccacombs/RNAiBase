@@ -30,19 +30,20 @@
 }
 
 .hyperlink {
-  color: var(--mantine-color-black, black);
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  
 }
 
 .logo {
-  stroke: var(--logo-stroke-light, #052049);
+  stroke: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
 }
 
 .tag {
-  color: var(--logo-stroke-light, #052049);
+  color: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
 }
 
 .title {
-  color: var(--mantine-color-black, black);
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
   font-size: 6.25rem; /* Converted rem(100px) */
   font-weight: 900;
   letter-spacing: -0.125rem; /* Converted rem(-2px) */
