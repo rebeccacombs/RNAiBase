@@ -4,12 +4,13 @@ import { Anchor, Card, Group, Image, Text, Title } from '@mantine/core';
 import Arrow from '@/public/arrow.svg';
 import Bar from '@/public/bar.svg';
 import LogoSmall from '@/public/logosmall.svg';
+//https://www.svgrepo.com/svg/1473/medicine?edit=true
+import Medicine from '@/public/medicine.svg';
 import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
 import { Tag } from './Tag';
 import classes from './Welcome.module.css';
 
 export function Welcome() {
-  
   return (
     <>
       <div className={classes.flexContainer}>
@@ -283,6 +284,31 @@ export function Welcome() {
                 src={Arrow}
                 alt="Arrow Icon"
                 style={{ filter: 'invert(1) brightness(2)' }}
+              />
+            </div>
+          </Card>
+        </Link>
+
+        
+        <Link href="/clinicaltrials" passHref className={classes.cardLink}>
+          <Card className={classes.card} style={{ backgroundColor: '#2b5587' }}>
+            <Text className={`${classes.cardText}`} style={{ color: '#e6fdff' }}>
+              Clinical Trials
+            </Text>
+            <div className={classes.cardIconContainer}>
+              <Image
+                component={NextImage}
+                src={Medicine}
+                alt="Small Logo"
+                className={classes.cardIcon}
+              />
+            </div>
+            <div className={classes.arrowContainer}>
+              <Image
+                component={NextImage}
+                src={Arrow}
+                alt="Arrow Icon"
+                style={{ filter: 'invert(0) brightness(5)' }}
               />
             </div>
           </Card>

@@ -2,22 +2,22 @@
 'use client';
 
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
+import { IconAdjustments, IconFilter, IconInfoCircle, IconSearch } from '@tabler/icons-react';
 import {
-  TextInput,
-  Select,
-  Grid,
-  Paper,
-  Stack,
   Accordion,
-  Group,
-  Button,
-  Text,
-  List,
   Box,
+  Button,
+  Grid,
+  Group,
+  List,
+  Paper,
+  Select,
+  Stack,
+  Text,
+  TextInput,
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { IconSearch, IconAdjustments, IconFilter, IconInfoCircle } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import classes from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -51,7 +51,7 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
   // update search when values change
   const updateSearch = React.useCallback(() => {
     const params = new URLSearchParams();
-    
+
     if (searchValue) params.set('search', searchValue);
     if (journalValue) params.set('journal', journalValue);
     if (sortValue) params.set('sort', sortValue);
@@ -101,9 +101,17 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
               </Accordion.Control>
               <Accordion.Panel>
                 <List size="sm" spacing="xs">
-                  <List.Item>Search for authors using "author:" prefix (e.g., "author:John")</List.Item>
-                  <List.Item>Combine title and author search with semicolon (e.g., "machine learning; author:Smith")</List.Item>
-                  <List.Item>Use partial names for authors (e.g., "author:rob" will match "Robert", "Robertson", etc.)</List.Item>
+                  <List.Item>
+                    Search for authors using "author:" prefix (e.g., "author:John")
+                  </List.Item>
+                  <List.Item>
+                    Combine title and author search with semicolon (e.g., "machine learning;
+                    author:Smith")
+                  </List.Item>
+                  <List.Item>
+                    Use partial names for authors (e.g., "author:rob" will match "Robert",
+                    "Robertson", etc.)
+                  </List.Item>
                   <List.Item>All searches are case-insensitive</List.Item>
                   <List.Item>Separate multiple search terms with spaces</List.Item>
                 </List>
@@ -142,7 +150,7 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
                       placeholder="Filter by journal"
                       data={[
                         { value: '', label: 'All Journals' },
-                        ...journals.map(j => ({ value: j, label: j }))
+                        ...journals.map((j) => ({ value: j, label: j })),
                       ]}
                       searchable
                       clearable
@@ -169,11 +177,7 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
         </Stack>
 
         <Group justify="flex-end">
-          <Button
-            variant="subtle"
-            onClick={handleReset}
-            leftSection={<IconFilter size={16} />}
-          >
+          <Button variant="subtle" onClick={handleReset} leftSection={<IconFilter size={16} />}>
             Reset Filters
           </Button>
         </Group>

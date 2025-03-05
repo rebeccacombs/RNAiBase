@@ -1,0 +1,143 @@
+/* Flex Containers */
+.flexContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem; /* Converted rem(20px) to rem */
+    flex-shrink: 0;
+    min-width: 300px;
+    flex: 1; /* Improved spacing flexibility */
+  }
+  
+  .itemRight {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    padding-top: 20px;
+  }
+  
+  .itemLeft {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 20px;
+  }
+  
+  .hyperlink {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+    
+  }
+  
+  .logo {
+    stroke: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
+  }
+  
+  .tag {
+    color: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
+  }
+  
+  .title {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+    font-size: 6.25rem; /* Converted rem(100px) */
+    font-weight: 900;
+    letter-spacing: -0.125rem; /* Converted rem(-2px) */
+  }
+  
+  /* Typography */
+  .spaceFont, .regularFont, .boldFont, .italicFont, .lightFont {
+    font-family: var(--font-logika);
+    font-style: normal;
+  }
+  
+  .boldFont {
+    font-weight: 800;
+  }
+  
+  .italicFont {
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+  .lightFont {
+    font-weight: 400;
+  }
+  
+  .heading1 {
+    font-size: 1.875rem; /* Converted rem(30px) */
+  }
+  
+  .heading2 {
+    font-size: 1.25rem; /* Converted rem(20px) */
+  }
+  
+  /* Group Container */
+  .groupContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* Cards */
+  .card {
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px;
+    transition: transform 0.3s;
+    will-change: transform; /* Improved performance */
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cardIconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 180px;
+    flex-shrink: 0; /* Prevent content overlap */
+  }
+  
+  .cardIcon {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .arrowContainer {
+    display: flex;
+    justify-content: flex-start;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .cardText {
+    font-size: 1.5rem;
+    font-family: var(--font-logika);
+    font-weight: 800;
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .cardTextWhite {
+    color: white;
+  }
+  
+  .cardLink {
+    text-decoration: none;
+  }
+  

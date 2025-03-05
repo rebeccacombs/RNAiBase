@@ -135,7 +135,12 @@ export default function PapersPageContent() {
           >
             Back to Home
           </Button>
-          <Title order={1}>Research Papers</Title>
+          <Group justify="space-between" align="center">
+            <Title order={1}>Research Papers</Title>
+            <Text size="md">
+              Total papers: {total}, with {papers.length} on this page.
+            </Text>
+          </Group>
         </span>
         <SearchBar onSearch={handleSearchBarChange} loading={loading} />
 

@@ -16,3 +16,7 @@ export async function GET(request: NextRequest, context: any) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+
+//so i want a trials page and i want that to display the drugs that are within my RNAiDrug Table
+// for each RNAidrug, i want a user to be able to click onto it and for there to be a subpage listing all of the clinical trials information pertaining to that drug, which can be found in the ClinicalTrial table of the database
