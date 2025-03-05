@@ -11,7 +11,6 @@ interface RNAiDrugSummary {
   id: string;
   name: string;
   clinicalTrialsCount: number;
-  indication?: string;
 }
 
 interface ClinicalTrialsContentProps {
@@ -48,7 +47,6 @@ export default function ClinicalTrialsContent({ drugs }: ClinicalTrialsContentPr
         <div className="flex flex-wrap gap-8">
           {drugs.map((drug) => {
             const isHovered = hoveredCardId === drug.id;
-            const indication = drug.indication || 'Treatment for various conditions';
 
             return (
               <div
@@ -81,17 +79,11 @@ export default function ClinicalTrialsContent({ drugs }: ClinicalTrialsContentPr
                     }}
                   >
                     <Stack className="h-full">
-                      <Box>
-                        <Title order={3} className={isHovered ? 'text-blue-600' : ''}>
-                          {capitalizeWords(drug.name)}
-                        </Title>
+                      <Title order={3} className={isHovered ? 'text-blue-600' : ''}>
+                        {capitalizeWords(drug.name)}
+                      </Title>
 
-                        <Text c="dimmed" size="sm">
-                          {indication}
-                        </Text>
-                      </Box>
-
-                      <Text c="dimmed" size="sm" className={isHovered ? 'font-medium' : ''}>
+                      <Text size="sm" fw={500} className={isHovered ? 'font-medium' : ''}>
                         {drug.clinicalTrialsCount} Clinical Trials
                       </Text>
                     </Stack>
