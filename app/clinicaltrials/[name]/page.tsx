@@ -5,11 +5,11 @@ import prisma from '@/lib/db';
 import DrugDetailContent from './DrugDetailContent';
 import DrugDetailLoading from './DrugDetailLoading';
 
-// This is a Server Component - no 'use client' here
+// Updated PageProps to use Promise-based params
 interface PageProps {
-  params: {
+  params: Promise<{
     name: string;
-  };
+  }>;
 }
 
 // Server-side data fetching with optimization
@@ -51,7 +51,7 @@ async function getDrugWithTrials(name: string) {
 
 export async function generateMetadata({ params }: PageProps) {
   // Await params first
-  const resolvedParams = await Promise.resolve(params);
+  const resolvedParams = await params;
   const drug = await prisma.rNAiDrug.findUnique({
     where: { name: decodeURIComponent(resolvedParams.name.toLowerCase()) },
     select: { name: true }, // Only fetch the name for metadata
@@ -81,8 +81,8 @@ export default async function DrugPage({ params }: PageProps) {
 
 // Separate async component to handle data fetching
 async function DrugDetails({ params }: { params: PageProps['params'] }) {
-  // Await params first
-  const resolvedParams = await Promise.resolve(params);
+  // Await params first - updated to use await directly on params
+  const resolvedParams = await params;
   const drug = await getDrugWithTrials(resolvedParams.name);
 
   if (!drug) {
