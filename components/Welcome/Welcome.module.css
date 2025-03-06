@@ -4,16 +4,19 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .titleContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem; /* Converted rem(20px) to rem */
+  gap: 1.25rem;
   flex-shrink: 0;
   min-width: 300px;
-  flex: 1; /* Improved spacing flexibility */
+  flex: 1;
+  padding: 0 10px;
+  transition: all 0.3s ease;
 }
 
 .itemRight {
@@ -31,11 +34,16 @@
 
 .hyperlink {
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  
 }
 
 .logo {
   stroke: light-dark(var(--logo-stroke-light, #052049), var(--logo-stroke-dark, #96ABDC));
+  width: 100%;
+  max-width: 205px;
+  height: auto;
+  transition: all 0.3s ease;
+  transform-origin: center center;
+  display: block;
 }
 
 .tag {
@@ -44,9 +52,9 @@
 
 .title {
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  font-size: 6.25rem; /* Converted rem(100px) */
+  font-size: 6.25rem;
   font-weight: 900;
-  letter-spacing: -0.125rem; /* Converted rem(-2px) */
+  letter-spacing: -0.125rem;
 }
 
 /* Typography */
@@ -69,11 +77,11 @@
 }
 
 .heading1 {
-  font-size: 1.875rem; /* Converted rem(30px) */
+  font-size: 1.875rem;
 }
 
 .heading2 {
-  font-size: 1.25rem; /* Converted rem(20px) */
+  font-size: 1.25rem;
 }
 
 /* Group Container */
@@ -83,6 +91,7 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
+  flex-wrap: wrap; /* Allow cards to wrap on mobile */
 }
 
 /* Cards */
@@ -96,7 +105,8 @@
   align-items: flex-start;
   padding: 24px;
   transition: transform 0.3s;
-  will-change: transform; /* Improved performance */
+  will-change: transform;
+  margin-bottom: 20px; /* Add margin between cards when they wrap */
 }
 
 .card:hover {
@@ -110,7 +120,7 @@
   align-items: center;
   width: 100%;
   height: 180px;
-  flex-shrink: 0; /* Prevent content overlap */
+  flex-shrink: 0;
 }
 
 .cardIcon {
@@ -139,4 +149,112 @@
 
 .cardLink {
   text-decoration: none;
+}
+
+/* Responsive Visibility Classes */
+.desktopOnly {
+  display: none;
+}
+
+.mobileOnly {
+  display: block;
+}
+
+.tabletUp {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .desktopOnly {
+    display: block;
+  }
+  
+  .mobileOnly {
+    display: none;
+  }
+}
+
+@media (min-width: 576px) {
+  .tabletUp {
+    display: block;
+  }
+}
+
+/* Single breakpoint for clean transition */
+@media (max-width: 992px) {
+  .flexContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .itemLeft {
+    display: none; /* Hide completely on mobile */
+  }
+  
+  .itemRight {
+    padding: 15px 10px;
+    margin: 0;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .titleContainer {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+    margin: 15px 0;
+    width: 100%;
+  }
+  
+  .title {
+    font-size: 3rem;
+    text-align: center;
+    line-height: 1.1;
+  }
+  
+  .logo {
+    max-width: 180px;
+    margin: 0 auto;
+  }
+  
+  .heading1 {
+    font-size: 1.5rem;
+    padding: 0 15px;
+  }
+  
+  .heading2 {
+    font-size: 1rem;
+    padding: 0 15px;
+  }
+  
+  /* Removed the width:100% from card to keep original fixed width */
+  .card {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .groupContainer {
+    gap: 10px;
+    padding: 10px;
+  }
+}
+
+/* Smaller mobile devices */
+@media (max-width: 480px) {
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .card {
+    height: 250px;
+    width: 280px; /* Fixed width even on smallest screens */
+  }
+  
+  .cardIconContainer {
+    height: 140px;
+  }
+  
+  .cardText {
+    font-size: 1.25rem;
+  }
 }

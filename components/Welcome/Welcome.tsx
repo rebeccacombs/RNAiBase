@@ -1,32 +1,32 @@
+'use client';
+
 import NextImage from 'next/image';
 import Link from 'next/link';
-import { Anchor, Card, Group, Image, Text, Title } from '@mantine/core';
+import { Anchor, Box, Card, Container, Group, Image, Text, Title } from '@mantine/core';
 import Arrow from '@/public/arrow.svg';
 import Bar from '@/public/bar.svg';
 import LogoSmall from '@/public/logosmall.svg';
-//https://www.svgrepo.com/svg/1473/medicine?edit=true
 import Medicine from '@/public/medicine.svg';
 import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
-import { Tag } from './Tag';
 import classes from './Welcome.module.css';
 
 export function Welcome() {
   return (
-    <>
+    <Container size="lg" px="xs">
       <div className={classes.flexContainer}>
-        <div className={classes.itemLeft}>
-          <Tag />
-        </div>
+        {/* Empty div that will be hidden on mobile */}
+        
 
         {/* logo and title */}
         <div className={classes.titleContainer}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="205"
-            height="50"
+            width="100%"
+            height="auto"
             viewBox="0 0 205 50"
             fill="none"
             className={classes.logo}
+            preserveAspectRatio="xMidYMid meet"
           >
             <path
               className="svg-path"
@@ -205,39 +205,41 @@ export function Welcome() {
         </div>
       </div>
 
-      <Text
-        className={`${classes.heading1} ${classes.lightFont}`}
-        ta="center"
-        size="lg"
-        maw={600}
-        mx="auto"
-      >
-        The omnibus for RNA interference research and development.
-      </Text>
-
-      <Text
-        className={`${classes.heading2} ${classes.spaceFont}`}
-        ta="center"
-        size="lg"
-        maw={950}
-        mx="auto"
-        mt="lg"
-      >
-        We have compiled over 500 academic papers from PubMed since 2017 to view the relationships
-        between where research today is being done and the relevant populations affected by RNAi
-        diseases and medications. A project through the{' '}
-        <Anchor
-          inherit
-          target="_blank"
-          underline="always"
-          href="http://pro-sirna.com/lab/team.html"
+      <Box my="md">
+        <Text
+          className={`${classes.heading1} ${classes.lightFont}`}
+          ta="center"
           size="lg"
-          className={classes.hyperlink}
+          maw={600}
+          mx="auto"
         >
-          Pro-siRNA Lab
-        </Anchor>{' '}
-        at Duke Kunshan University.
-      </Text>
+          The omnibus for RNA interference research and development.
+        </Text>
+
+        <Text
+          className={`${classes.heading2} ${classes.spaceFont}`}
+          ta="center"
+          size="lg"
+          maw={950}
+          mx="auto"
+          mt="lg"
+        >
+          We have compiled over 500 academic papers from PubMed since 2017 to view the relationships
+          between where research today is being done and the relevant populations affected by RNAi
+          diseases and medications. A project through the{' '}
+          <Anchor
+            inherit
+            target="_blank"
+            underline="always"
+            href="http://pro-sirna.com/lab/team.html"
+            size="lg"
+            className={classes.hyperlink}
+          >
+            Pro-siRNA Lab
+          </Anchor>{' '}
+          at Duke Kunshan University.
+        </Text>
+      </Box>
 
       <Text
         className={`${classes.heading1} ${classes.boldFont}`}
@@ -289,7 +291,6 @@ export function Welcome() {
           </Card>
         </Link>
 
-        
         <Link href="/clinicaltrials" passHref className={classes.cardLink}>
           <Card className={classes.card} style={{ backgroundColor: '#2b5587' }}>
             <Text className={`${classes.cardText}`} style={{ color: '#e6fdff' }}>
@@ -314,6 +315,6 @@ export function Welcome() {
           </Card>
         </Link>
       </Group>
-    </>
+    </Container>
   );
 }

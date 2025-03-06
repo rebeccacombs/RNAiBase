@@ -32,6 +32,7 @@
     "@mantine/notifications": "^7.14.1",
     "@mantine/nprogress": "^7.14.1",
     "@mantine/spotlight": "^7.14.1",
+    "@mantine/styles": "^6.0.22",
     "@mantine/tiptap": "^7.14.1",
     "@next/bundle-analyzer": "^14.2.4",
     "@prisma/client": "5.10.2",

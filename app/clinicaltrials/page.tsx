@@ -29,10 +29,10 @@ async function getDrugs() {
     });
 
     // Transform the data to match the expected format
-    return drugs.map(drug => ({
+    return drugs.map((drug) => ({
       id: drug.id,
       name: drug.name,
-      clinicalTrialsCount: drug._count.clinicalTrials
+      clinicalTrialsCount: drug._count.clinicalTrials,
     }));
   } catch (error) {
     console.error('Error fetching drugs:', error);
@@ -43,7 +43,7 @@ async function getDrugs() {
 export default async function DrugsPage() {
   // Fetch data on the server
   const drugs = await getDrugs();
-  
+
   // Pass data as props to client component
   return (
     <Suspense fallback={<ClinicalTrialsLoading />}>
