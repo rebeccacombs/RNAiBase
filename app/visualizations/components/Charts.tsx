@@ -1,9 +1,8 @@
 'use client';
 
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Box, Paper, Skeleton, Stack, Text } from '@mantine/core';
 import dynamic from 'next/dynamic';
-import classes from '../visualization.module.css';
 
 // Dynamically import Recharts components with no SSR
 const RechartComponents = dynamic(
@@ -41,12 +40,10 @@ const Charts = memo(({ data, loading, chartType, visualizationType, onDataClick 
 
   if (!data.length) {
     return (
-      <Paper p="xl" withBorder className={classes.paperContainer}>
+      <Paper p="xl" withBorder>
         <Stack align="center" gap="md">
           <Text size="lg" fw={500}>No data available</Text>
-          <Text size="sm" c="dimmed" className={classes.smallText}>
-            Try adjusting your filters or selecting a different visualization type
-          </Text>
+          <Text size="sm" c="dimmed">Try adjusting your filters or selecting a different visualization type</Text>
         </Stack>
       </Paper>
     );
@@ -56,30 +53,14 @@ const Charts = memo(({ data, loading, chartType, visualizationType, onDataClick 
     return <Skeleton h={500} radius="md" />;
   }
 
-  // Determine the appropriate container class based on chart type
-  const containerClass = chartType === 'bar' 
-    ? classes.barChartContainer 
-    : chartType === 'pie' 
-      ? classes.pieChartContainer 
-      : classes.treemapChartContainer;
-
-  // Determine the appropriate wrapper class based on chart type
-  const wrapperClass = chartType === 'pie' ? classes.pieChartWrapper : classes.rechartsWrapper;
-
   return (
-    <Box h={500} className={classes.chartContainer}>
-      <div className={`${classes.chartBox} ${containerClass}`}>
-        <RechartComponents
-          data={data}
-          chartType={chartType}
-          visualizationType={visualizationType}
-          onDataClick={onDataClick}
-          className={classes.rechartsContainer}
-          wrapperClassName={wrapperClass}
-          smallAxisClassName={classes.smallAxisText}
-          extraSmallAxisClassName={classes.extraSmallAxisText}
-        />
-      </div>
+    <Box h={500}>
+      <RechartComponents
+        data={data}
+        chartType={chartType}
+        visualizationType={visualizationType}
+        onDataClick={onDataClick}
+      />
     </Box>
   );
 });

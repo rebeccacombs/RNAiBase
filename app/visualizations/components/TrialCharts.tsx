@@ -4,7 +4,6 @@
 import React, { memo } from 'react';
 import { Box, Paper, Skeleton, Stack, Text } from '@mantine/core';
 import dynamic from 'next/dynamic';
-import classes from '../visualization.module.css'; // Import the CSS classes
 
 // Define the props interface for TrialRechartComponents
 interface TrialRechartComponentsProps {
@@ -70,15 +69,13 @@ const TrialCharts = memo(({
   }
 
   return (
-    <Box h={500} className={classes.chartContainer}>
-      <div className={classes.chartBox}>
-        <RechartComponents
-          data={data}
-          chartType={chartType}
-          visualizationType={visualizationType}
-          onDataClick={onDataClick}
-        />
-      </div>
+    <Box h={500}>
+      <RechartComponents
+        data={data}
+        chartType={chartType}
+        visualizationType={visualizationType}
+        onDataClick={onDataClick}
+      />
     </Box>
   );
 });

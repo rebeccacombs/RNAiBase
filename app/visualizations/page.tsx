@@ -15,7 +15,6 @@ import { IconArrowLeft, IconFiles, IconFlask } from '@tabler/icons-react';
 import Link from 'next/link';
 import PaperVisualizations from './PaperVisualizations';
 import ClinicalTrialVisualizations from './ClinicalTrialVisualizations';
-import classes from './visualization.module.css'; // Import the CSS classes
 
 // Shared types
 export type DataType = 'papers' | 'trials';
@@ -55,7 +54,7 @@ export default function UnifiedVisualizationsPage() {
   }
 
   return (
-    <Container size="xl" py="xl" className={classes.visualizationContainer}>
+    <Container size="xl" py="xl">
       <Stack>
         <Group>
           <Button
@@ -87,13 +86,11 @@ export default function UnifiedVisualizationsPage() {
         </Tabs>
 
         {/* Render the appropriate visualization component based on tab selection */}
-        <div className={classes.visualizationWrapper}>
-          {dataType === 'papers' ? (
-            <PaperVisualizations />
-          ) : (
-            <ClinicalTrialVisualizations />
-          )}
-        </div>
+        {dataType === 'papers' ? (
+          <PaperVisualizations />
+        ) : (
+          <ClinicalTrialVisualizations />
+        )}
       </Stack>
     </Container>
   );
