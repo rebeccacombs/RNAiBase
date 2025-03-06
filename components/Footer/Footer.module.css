@@ -1,0 +1,19 @@
+.footer {
+    margin-top: 50px;
+    border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+    padding: 15px 0;
+  }
+  
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  @media (max-width: 992px) {
+    .inner {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }

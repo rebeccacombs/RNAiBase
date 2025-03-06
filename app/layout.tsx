@@ -5,6 +5,7 @@ import { Space_Grotesk } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Analytics } from '@vercel/analytics/react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { Footer } from '../components/Footer/Footer';
 import { theme } from '../theme';
 
 const spaceGrotesk = Space_Grotesk({
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: any }) {
           }}
         >
           {children}
+          <Footer />
         </MantineProvider>
       </body>
     </html>
