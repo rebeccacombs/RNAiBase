@@ -3,6 +3,7 @@
 // app/clinicaltrials/[name]/DrugDetailContent.tsx
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { IconArrowLeft, IconArrowUp, IconChevronDown } from '@tabler/icons-react';
 import {
   Affix,
@@ -60,24 +61,22 @@ function capitalizeWords(str: string): string {
 // Status color mapping function with hex values
 function getStatusColor(status: string): string {
   const statusMap: Record<string, string> = {
-    RECRUITING: '#2563EB', 
+    RECRUITING: '#2563EB',
     ACTIVE_NOT_RECRUITING: '#696969',
-    COMPLETED: '#10B981', 
-    APPROVED_FOR_MARKETING: '#0D9488', 
-    NOT_YET_RECRUITING: '#FBBF24', 
-    NO_LONGER_AVAILABLE: '#6B7280', 
-    TERMINATED: '#EF4444', 
-    WITHDRAWN: '#9CA3AF', 
-    SUSPENDED: '#F97316', 
-    ENROLLING_BY_INVITATION: '#6366F1', 
-    UNKNOWN_STATUS: '#9CA3AF', 
+    COMPLETED: '#10B981',
+    APPROVED_FOR_MARKETING: '#0D9488',
+    NOT_YET_RECRUITING: '#FBBF24',
+    NO_LONGER_AVAILABLE: '#6B7280',
+    TERMINATED: '#EF4444',
+    WITHDRAWN: '#9CA3AF',
+    SUSPENDED: '#F97316',
+    ENROLLING_BY_INVITATION: '#6366F1',
+    UNKNOWN_STATUS: '#9CA3AF',
   };
-
 
   if (statusMap[status]) {
     return statusMap[status];
   }
-
 
   const statusLower = status.toLowerCase();
   for (const [key, value] of Object.entries(statusMap)) {
@@ -86,17 +85,18 @@ function getStatusColor(status: string): string {
     }
   }
 
-
-  return '#3B82F6'; 
+  return '#3B82F6';
 }
-
 
 function formatStatus(status: string): string {
   return status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-
 export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
+  const searchParams = useSearchParams();
+  const backParam = searchParams.get('back');
+  const isFromVisualizations = backParam === 'visualizations';
+
   const [trials, setTrials] = useState(drug.clinicalTrials);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(drug.hasMoreTrials || false);
@@ -127,6 +127,36 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
     }
   };
 
+  // Add an effect to handle fragment navigation
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#trial-')) {
+        // Give time for the DOM to be fully loaded
+        const scrollToElement = () => {
+          const element = document.getElementById(hash.substring(1));
+          if (element) {
+            // Scroll the element into view with smooth behavior
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Highlight effect
+            element.style.transition = 'background-color 1s ease';
+            element.style.backgroundColor = '#f0f9ff'; // Light blue background
+            setTimeout(() => {
+              element.style.backgroundColor = '';
+            }, 2000); // Remove highlight after 2 seconds
+          } else {
+            // If element not found yet, try again in a short while
+            setTimeout(scrollToElement, 100);
+          }
+        };
+
+        // Wait for DOM to be ready
+        setTimeout(scrollToElement, 500);
+      }
+    }
+  }, [trials]);
+
   // Scroll to top function
   const scrollToTop = () => {
     containerRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -143,12 +173,12 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
         <div>
           <Button
             component={Link}
-            href="/clinicaltrials"
+            href={isFromVisualizations ? '/visualizations?tab=trials' : '/clinicaltrials'}
             variant="subtle"
             leftSection={<IconArrowLeft size={16} />}
             mb="md"
           >
-            Back to Drugs
+            {isFromVisualizations ? 'Back to Visualizations' : 'Back to Drugs'}
           </Button>
 
           <Title order={1}>{displayName}</Title>
@@ -210,7 +240,7 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
 
         <Stack gap="lg">
           {trials.map((trial) => (
-            <Paper key={trial.id} shadow="sm" p="lg" withBorder>
+            <Paper key={trial.id} id={`trial-${trial.nctId}`} shadow="sm" p="lg" withBorder>
               <Stack gap="md">
                 {/* Title in its own section */}
                 <Title order={3}>{trial.title}</Title>
@@ -235,7 +265,7 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
 
                 {trial.conditions.length > 0 && (
                   <div>
-                    <Text fw={500} mb="xs">
+                    <Text fw={700} mb="xs">
                       Conditions:
                     </Text>
                     <Group gap="xs">
