@@ -32,6 +32,10 @@ interface TrialRechartComponentsProps {
   chartType: 'bar' | 'pie' | 'treemap';
   visualizationType: 'phases' | 'status' | 'sponsors' | 'timeline' | 'conditions';
   onDataClick: (entry: any) => void;
+  className?: string;
+  wrapperClassName?: string;
+  smallAxisClassName?: string;
+  extraSmallAxisClassName?: string;
 }
 
 // Color constants
@@ -162,94 +166,124 @@ function formatTimelineLabel(label: string) {
 }
 
 const TrialRechartComponents = memo(
-  ({ data, chartType, visualizationType, onDataClick }: TrialRechartComponentsProps) => {
+  ({ 
+    data, 
+    chartType, 
+    visualizationType, 
+    onDataClick,
+    className,
+    wrapperClassName,
+    smallAxisClassName,
+    extraSmallAxisClassName
+  }: TrialRechartComponentsProps) => {
     // Process the data for timeline if needed
     const chartData =
       visualizationType === 'timeline'
         ? data.map((item) => ({ ...item, name: formatTimelineLabel(item.name) }))
         : data;
+    
+    // Calculate dynamic height based on data length to ensure all ticks are visible
+    // For bar charts, we need about 30px per item for comfortable spacing
+    const calculatedHeight = chartType === 'bar' ? Math.max(500, chartData.length * 30) : 500;
 
     switch (chartType) {
       case 'bar':
         return (
-          <ResponsiveContainer width="100%" height={500}>
-            <BarChart
-              data={chartData}
-              layout={visualizationType === 'timeline' ? 'vertical' : 'vertical'}
-              margin={{ left: 150 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
-              <YAxis dataKey="name" type="category" width={150} tick={{ fontSize: 12 }} />
-              <Tooltip
-                formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
-              />
-              {visualizationType === 'phases' || visualizationType === 'status' ? (
-                <Bar dataKey="value" onClick={onDataClick} style={{ cursor: 'pointer' }}>
+          <div className="recharts-bar-chart">
+            <ResponsiveContainer width="100%" height={calculatedHeight} className={className}>
+              <BarChart
+                data={chartData}
+                layout="vertical"
+                margin={{ left: 150, top: 10, bottom: 10, right: 30 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis 
+                  dataKey="name" 
+                  type="category" 
+                  width={150} 
+                  tick={{ 
+                    fontSize: 11,
+                    className: `${smallAxisClassName} ${extraSmallAxisClassName}`
+                  }}
+                  interval={0} // This ensures every tick is displayed
+                />
+                <Tooltip
+                  formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
+                  wrapperClassName={wrapperClassName}
+                />
+                {visualizationType === 'phases' || visualizationType === 'status' ? (
+                  <Bar dataKey="value" onClick={onDataClick} style={{ cursor: 'pointer' }}>
+                    {chartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={getColorForItem(visualizationType, entry.name, index)}
+                      />
+                    ))}
+                  </Bar>
+                ) : (
+                  <Bar
+                    dataKey="value"
+                    fill="var(--mantine-primary-color-filled)"
+                    onClick={onDataClick}
+                    style={{ cursor: 'pointer' }}
+                  />
+                )}
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        );
+
+      case 'pie':
+        return (
+          <div className="recharts-pie-chart">
+            <ResponsiveContainer width="100%" height={500} className={className}>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={200}
+                  label={(entry) => entry.name}
+                  onClick={onDataClick}
+                  style={{ cursor: 'pointer' }}
+                >
                   {chartData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={getColorForItem(visualizationType, entry.name, index)}
                     />
                   ))}
-                </Bar>
-              ) : (
-                <Bar
-                  dataKey="value"
-                  fill="var(--mantine-primary-color-filled)"
-                  onClick={onDataClick}
-                  style={{ cursor: 'pointer' }}
+                </Pie>
+                <Tooltip
+                  formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
+                  wrapperClassName={wrapperClassName}
                 />
-              )}
-            </BarChart>
-          </ResponsiveContainer>
-        );
-
-      case 'pie':
-        return (
-          <ResponsiveContainer width="100%" height={500}>
-            <PieChart>
-              <Pie
-                data={chartData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={200}
-                label={(entry) => entry.name}
-                onClick={onDataClick}
-                style={{ cursor: 'pointer' }}
-              >
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={getColorForItem(visualizationType, entry.name, index)}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         );
 
       case 'treemap':
         return (
-          <ResponsiveContainer width="100%" height={500}>
-            <Treemap
-              data={chartData}
-              dataKey="value"
-              aspectRatio={1}
-              onClick={(node) => {
-                if (node && node.name) {
-                  onDataClick({ name: node.name, value: node.value });
-                }
-              }}
-              content={<TreemapContent />}
-              isAnimationActive={false}
-            />
-          </ResponsiveContainer>
+          <div className="recharts-treemap-chart">
+            <ResponsiveContainer width="100%" height={500} className={className}>
+              <Treemap
+                data={chartData}
+                dataKey="value"
+                aspectRatio={1}
+                onClick={(node) => {
+                  if (node && node.name) {
+                    onDataClick({ name: node.name, value: node.value });
+                  }
+                }}
+                content={<TreemapContent />}
+                isAnimationActive={false}
+              />
+            </ResponsiveContainer>
+          </div>
         );
 
       default:

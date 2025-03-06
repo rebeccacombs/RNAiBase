@@ -1,0 +1,65 @@
+/* Global styles for Recharts components */
+
+/* Main wrapper for recharts */
+.recharts-wrapper {
+    margin: 0 !important;
+  }
+  
+  /* Bar chart specific alignment */
+  .recharts-bar-chart .recharts-wrapper {
+    margin: 0 !important;
+    transform-origin: left center !important;
+  }
+  
+  /* Pie chart specific alignment */
+  .recharts-pie-chart .recharts-wrapper {
+    margin: 0 auto !important;
+    transform-origin: center center !important;
+  }
+  
+  /* Treemap specific alignment */
+  .recharts-treemap-chart .recharts-wrapper {
+    margin: 0 !important;
+    transform-origin: left center !important;
+  }
+  
+  /* Responsive container adjustments */
+  .recharts-responsive-container {
+    padding-left: 0 !important;
+    width: 100% !important;
+  }
+  
+  /* Axis text styling */
+  .recharts-cartesian-axis-tick-value {
+    font-size: 11px;
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .recharts-bar-chart .recharts-wrapper {
+      transform: scale(0.9);
+    }
+    
+    .recharts-pie-chart .recharts-wrapper {
+      transform: scale(0.9);
+    }
+    
+    .recharts-cartesian-axis-tick-value {
+      font-size: 10px;
+    }
+  }
+  
+  /* Extra small screens */
+  @media (max-width: 576px) {
+    .recharts-bar-chart .recharts-wrapper {
+      transform: scale(0.8);
+    }
+    
+    .recharts-pie-chart .recharts-wrapper {
+      transform: scale(0.8);
+    }
+    
+    .recharts-cartesian-axis-tick-value {
+      font-size: 9px;
+    }
+  }

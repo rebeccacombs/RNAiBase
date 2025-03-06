@@ -14,6 +14,10 @@ interface ChartProps {
   chartType: string;
   visualizationType: string;
   onDataClick: (entry: any) => void;
+  className?: string;
+  wrapperClassName?: string;
+  smallAxisClassName?: string;
+  extraSmallAxisClassName?: string;
 }
 
 // Memoized TreemapContent component
@@ -101,68 +105,87 @@ const RechartComponents = memo(({
   data, 
   chartType, 
   visualizationType, 
-  onDataClick 
+  onDataClick,
+  className,
+  wrapperClassName,
+  smallAxisClassName,
+  extraSmallAxisClassName
 }: ChartProps) => {
   switch (chartType) {
     case 'bar':
       return (
-        <ResponsiveContainer width="100%" height={500}>
-          <BarChart data={data} layout="vertical" margin={{ left: 150 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" />
-            <YAxis dataKey="name" type="category" width={150} />
-            <Tooltip 
-              formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
-            />
-            <Bar 
-              dataKey="value" 
-              fill="var(--mantine-primary-color-filled)"
-              onClick={onDataClick}
-              style={{ cursor: 'pointer' }}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+        <div style={{ width: '100%' }}>
+          <ResponsiveContainer width="100%" height={500} className={className}>
+            <BarChart data={data} layout="vertical" margin={{ left: 150 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis 
+                dataKey="name" 
+                type="category" 
+                width={150} 
+                tick={{ 
+                  className: `${smallAxisClassName} ${extraSmallAxisClassName}` 
+                }}
+              />
+              <Tooltip 
+                formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
+                wrapperClassName={wrapperClassName}
+              />
+              <Bar 
+                dataKey="value" 
+                fill="var(--mantine-primary-color-filled)"
+                onClick={onDataClick}
+                style={{ cursor: 'pointer' }}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       );
 
     case 'pie':
       return (
-        <ResponsiveContainer width="100%" height={500}>
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={200}
-              fill="var(--mantine-primary-color-filled)"
-              label={(entry) => entry.name}
-              onClick={onDataClick}
-              style={{ cursor: 'pointer' }}
-            />
-            <Tooltip 
-              formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        <div style={{ width: '100%' }}>
+          <ResponsiveContainer width="100%" height={500} className={className}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={200}
+                fill="var(--mantine-primary-color-filled)"
+                label={(entry) => entry.name}
+                onClick={onDataClick}
+                style={{ cursor: 'pointer' }}
+              />
+              <Tooltip 
+                formatter={(value: number) => [value, getVisualTypeLabel(visualizationType)]}
+                wrapperClassName={wrapperClassName}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       );
 
     case 'treemap':
       return (
-        <ResponsiveContainer width="100%" height={500}>
-          <Treemap
-            data={data}
-            dataKey="value"
-            aspectRatio={1}
-            onClick={(node) => {
-              if (node && node.name) {
-                onDataClick({ name: node.name, value: node.value });
-              }
-            }}
-            content={<TreemapContent />}
-            isAnimationActive={false}
-          />
-        </ResponsiveContainer>
+        <div style={{ width: '100%' }}>
+          <ResponsiveContainer width="100%" height={500} className={className}>
+            <Treemap
+              data={data}
+              dataKey="value"
+              aspectRatio={1}
+              onClick={(node) => {
+                if (node && node.name) {
+                  onDataClick({ name: node.name, value: node.value });
+                }
+              }}
+              content={<TreemapContent />}
+              isAnimationActive={false}
+            />
+          </ResponsiveContainer>
+        </div>
       );
 
     default:
