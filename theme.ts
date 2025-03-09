@@ -11,7 +11,6 @@ export const theme = createTheme({
         lineHeight: '1.4',
       },
       h2: { fontSize: rem(30), lineHeight: '1.5' },
-      // ...up to h6
       h6: { fontWeight: '900' },
     },
   },

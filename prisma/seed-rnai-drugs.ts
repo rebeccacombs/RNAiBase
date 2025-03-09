@@ -1,4 +1,3 @@
-// prisma/seed-rnai-drugs.ts
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -86,7 +85,6 @@ async function seedRNAiDrugs() {
   }
 }
 
-// Run the seed function
 seedRNAiDrugs().catch((error) => {
   console.error(error);
   process.exit(1);

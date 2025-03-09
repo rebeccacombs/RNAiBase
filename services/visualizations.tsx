@@ -1,4 +1,3 @@
-// services/visualizations.ts
 import prisma from '@/lib/db';
 
 interface DateFilter {

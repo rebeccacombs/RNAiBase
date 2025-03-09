@@ -1,23 +1,17 @@
 'use client';
 
-// app/clinicaltrials/[name]/DrugDetailLoading.tsx
 import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Badge, Button, Container, Divider, Group, Paper, Skeleton, Stack, Text, Title } from '@mantine/core';
 import { useParams } from 'next/navigation';
 
-// Helper function to capitalize drug names
 function capitalizeWords(str: string): string {
   return str.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-// No props needed - we'll get the name from useParams
 export default function DrugDetailLoading() {
-  // Get the drug name from the URL on the client side
   const params = useParams();
   const drugName = typeof params.name === 'string' ? params.name : '';
-  
-  // Format drug name for display (capitalize)
   const displayName = drugName 
     ? capitalizeWords(decodeURIComponent(drugName)) 
     : 'Loading...';
@@ -41,7 +35,6 @@ export default function DrugDetailLoading() {
           </Title>
         </div>
 
-        {/* Drug Information Card Loading State */}
         <Paper shadow="sm" p="lg" withBorder>
           <Stack gap="md">
             <Title order={2}>Drug Information</Title>
@@ -65,7 +58,6 @@ export default function DrugDetailLoading() {
         </div>
 
         <Stack gap="lg">
-          {/* Generate 3 placeholder clinical trial cards */}
           {Array(3).fill(0).map((_, index) => (
             <Paper key={index} shadow="sm" p="lg" withBorder>
               <Stack gap="md">

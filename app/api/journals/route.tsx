@@ -1,5 +1,3 @@
-// app/api/journals/route.ts
-
 import { NextResponse } from 'next/server';
 import { getJournals } from '@/services/papers';
 

@@ -1,4 +1,3 @@
-// app/api/papers/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getPapers, parseSearchQuery, type SearchTerms } from '@/services/papers';
 
@@ -10,7 +9,6 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
   try {
-    // parse + validate pagination params
     let page = 1;
     let limit = DEFAULT_PAGE_SIZE;
 
@@ -33,7 +31,6 @@ export async function GET(request: NextRequest) {
       limit = Math.min(parsedLimit, MAX_PAGE_SIZE);
     }
 
-    // Parse and validate sort parameter
     const sortBy = searchParams.get('sort');
     if (sortBy && !VALID_SORT_OPTIONS.includes(sortBy as any)) {
       return NextResponse.json({ error: 'Invalid sort option' }, { status: 400 });
@@ -54,7 +51,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Start date must be before end date' }, { status: 400 });
     }
 
-    // parse search query w/ proper typing
     const search = searchParams.get('search');
     const initialSearchTerms: SearchTerms = { titleTerms: [], authorTerms: [] };
     let searchTerms: SearchTerms = initialSearchTerms;
@@ -67,7 +63,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // construct filters object
     const filters = {
       page,
       limit,

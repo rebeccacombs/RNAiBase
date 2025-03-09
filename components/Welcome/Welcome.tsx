@@ -14,10 +14,7 @@ export function Welcome() {
   return (
     <Container size="lg" px="xs">
       <div className={classes.flexContainer}>
-        {/* Empty div that will be hidden on mobile */}
         
-
-        {/* logo and title */}
         <div className={classes.titleContainer}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +196,6 @@ export function Welcome() {
           </Title>
         </div>
 
-        {/* color scheme toggle */}
         <div className={classes.itemRight}>
           <ColorSchemeToggle />
         </div>

@@ -1,6 +1,5 @@
 'use client';
 
-// app/clinicaltrials/ClinicalTrialsLoading.tsx
 import { Button, Container, Group, Paper, Skeleton, Stack, Title } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';

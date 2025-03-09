@@ -1,4 +1,3 @@
-// app/papers/papersPageContent.tsx
 'use client';
 
 import React from 'react';
@@ -28,9 +27,6 @@ export default function PapersPageContent() {
   const [total, setTotal] = React.useState<number>(0);
   const [loading, setLoading] = React.useState<boolean>(true);
 
-  // Cache ref to store loaded data
-  const cacheRef = React.useRef<{ papers: PaperType[]; total: number } | null>(null);
-
   const currentParams = React.useMemo(
     () => new URLSearchParams(searchParams.toString()),
     [searchParams]
@@ -43,7 +39,6 @@ export default function PapersPageContent() {
       if (!response.ok) throw new Error('Failed to fetch papers');
       const data = await response.json();
 
-      // Update state without relying on the cache
       setPapers(data.papers || []);
       setTotal(data.total || 0);
     } catch (error) {
@@ -55,7 +50,6 @@ export default function PapersPageContent() {
     }
   }, []);
 
-  // Update URL and trigger search
   const updateSearchParams = React.useCallback(
     (newParams: URLSearchParams) => {
       router.push(`${pathname}?${newParams.toString()}`);
@@ -64,7 +58,6 @@ export default function PapersPageContent() {
     [pathname, router, handleSearch]
   );
 
-  // Handle pagination
   const handlePageChange = React.useCallback(
     (newPage: number) => {
       const newParams = new URLSearchParams(currentParams);
@@ -74,7 +67,6 @@ export default function PapersPageContent() {
     [currentParams, updateSearchParams]
   );
 
-  // Handle search bar
   const handleSearchBarChange = React.useCallback(
     (params: URLSearchParams) => {
       const newParams = new URLSearchParams(params);
@@ -101,7 +93,6 @@ export default function PapersPageContent() {
     [currentParams, updateSearchParams]
   );
 
-  // Initial load and URL
   React.useEffect(() => {
     handleSearch(currentParams);
   }, [currentParams, handleSearch]);

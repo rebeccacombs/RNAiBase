@@ -3,7 +3,6 @@
 import React, { memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Treemap } from 'recharts';
 
-// Types
 interface TreemapContentProps {
   root?: any;
   depth?: number;

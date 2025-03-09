@@ -1,4 +1,3 @@
-// services/papers.ts
 import prisma from '@/lib/db';
 
 export type Paper = {
@@ -60,7 +59,6 @@ export const getPapers = async (filters: SearchFilters) => {
     const where: any = {};
     const conditions = [];
 
-    // Handle title/abstract/keyword search terms
     if (searchTerms.titleTerms.length > 0) {
       const titleConditions = searchTerms.titleTerms.map((term) => ({
         OR: [
@@ -72,7 +70,6 @@ export const getPapers = async (filters: SearchFilters) => {
       conditions.push(...titleConditions);
     }
 
-    // Handle author search
     let authorMatches: string[] = [];
     if (searchTerms.authorTerms.length > 0) {
       const allPapers = await prisma.paper.findMany({
@@ -81,7 +78,6 @@ export const getPapers = async (filters: SearchFilters) => {
 
       const searchTermsLower = searchTerms.authorTerms.map((term) => term.toLowerCase());
 
-      // Create a Set of matching authors and convert to array
       const matchingAuthorsSet = new Set<string>();
       allPapers.forEach((paper) => {
         paper.authors.forEach((author) => {
@@ -91,7 +87,6 @@ export const getPapers = async (filters: SearchFilters) => {
         });
       });
 
-      // Convert Set to Array without spread operator
       authorMatches = Array.from(matchingAuthorsSet);
 
       if (authorMatches.length > 0) {
@@ -103,14 +98,12 @@ export const getPapers = async (filters: SearchFilters) => {
       }
     }
 
-    // Handle journal filter
     if (journal) {
       conditions.push({
         journal: { equals: journal, mode: 'insensitive' },
       });
     }
 
-    // Handle date range
     if (startDate || endDate) {
       const dateFilter: any = {};
       if (startDate) dateFilter.gte = new Date(startDate);
@@ -120,12 +113,10 @@ export const getPapers = async (filters: SearchFilters) => {
       });
     }
 
-    // Combine all conditions with AND
     if (conditions.length > 0) {
       where.AND = conditions;
     }
 
-    // Build sort options
     const orderBy = (() => {
       switch (sortBy) {
         case 'pub_date_asc':
@@ -141,7 +132,6 @@ export const getPapers = async (filters: SearchFilters) => {
       }
     })();
 
-    // Execute queries
     const [papers, total] = await Promise.all([
       prisma.paper.findMany({
         take: limit,
@@ -185,21 +175,18 @@ export function parseSearchQuery(searchQuery: string): SearchTerms {
   if (!searchQuery) return terms;
 
   try {
-    // Split the search query by semicolon to separate different search components
+  
     const components = searchQuery.split(';').map((comp) => comp.trim());
 
     components.forEach((component) => {
       if (!component) return;
 
-      // Check for author: prefix
       if (component.toLowerCase().startsWith('author:')) {
-        // Extract everything after "author:" and split by spaces
         const authorPart = component.substring(7).trim();
         if (authorPart) {
           terms.authorTerms.push(...authorPart.split(/\s+/).filter(Boolean));
         }
       } else {
-        // If no author: prefix, treat as title/general search terms
         terms.titleTerms.push(...component.split(/\s+/).filter(Boolean));
       }
     });

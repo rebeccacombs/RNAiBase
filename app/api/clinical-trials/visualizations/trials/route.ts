@@ -1,4 +1,3 @@
-// app/api/clinical-trials/visualizations/trials/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
@@ -24,22 +23,18 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Build date filter if provided
     const dateFilter: DateFilter = {};
     if (startDate) dateFilter.gte = new Date(startDate);
     if (endDate) dateFilter.lte = new Date(endDate);
 
-    // Build base query
     const baseWhere: any = {
       ...(Object.keys(dateFilter).length > 0 && { startDate: dateFilter }),
       ...(drugId && { drugId })
     };
 
-    // Add specific filter based on visualization type
     let trials;
     switch (type) {
       case 'phases':
-        // For phase visualization, filter by phase
         trials = await prisma.clinicalTrial.findMany({
           where: {
             ...baseWhere,
@@ -59,7 +54,6 @@ export async function GET(request: NextRequest) {
         break;
 
       case 'status':
-        // For status visualization, filter by status
         trials = await prisma.clinicalTrial.findMany({
           where: {
             ...baseWhere,
@@ -79,7 +73,6 @@ export async function GET(request: NextRequest) {
         break;
 
       case 'sponsors':
-        // For sponsors visualization, filter by sponsor
         trials = await prisma.clinicalTrial.findMany({
           where: {
             ...baseWhere,
@@ -99,7 +92,6 @@ export async function GET(request: NextRequest) {
         break;
 
       case 'timeline':
-        // For timeline visualization, parse the month/year
         const date = new Date(value);
         const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
         const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -126,7 +118,6 @@ export async function GET(request: NextRequest) {
         break;
 
       case 'conditions':
-        // For conditions visualization, filter by condition
         trials = await prisma.clinicalTrial.findMany({
           where: {
             ...baseWhere,
@@ -154,7 +145,6 @@ export async function GET(request: NextRequest) {
         );
     }
 
-    // Add drug name to each trial
     const formattedTrials = trials.map(trial => ({
       ...trial,
       drugName: trial.drug?.name

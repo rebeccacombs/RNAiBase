@@ -1,4 +1,3 @@
-// lib/update-drug-info.ts
 import prisma from '@/lib/db';
 
 const rnaIDrugInfo = [
@@ -84,6 +83,3 @@ export async function updateRNAiDrugInfo(): Promise<void> {
     throw error;
   }
 }
-
-// You can run this function directly:
-// updateRNAiDrugInfo().catch(console.error);

@@ -34,7 +34,6 @@ export function Tag() {
           </HoverCard>
         </Box>
         
-        {/* Simpler version for mobile that still allows credit */}
         <Box className={classes.mobileOnly}>
           <Anchor 
             href="https://github.com/rebeccacombs/rnai_project" 

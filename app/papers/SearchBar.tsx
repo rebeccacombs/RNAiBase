@@ -1,4 +1,3 @@
-// app/papers/SearchBar.tsx
 'use client';
 
 import React from 'react';
@@ -14,7 +13,6 @@ import {
   Paper,
   Select,
   Stack,
-  Text,
   TextInput,
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
@@ -33,7 +31,6 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
   const [sortValue, setSortValue] = React.useState(searchParams.get('sort') || 'pub_date_desc');
   const [dateRange, setDateRange] = React.useState<[Date | null, Date | null]>([null, null]);
 
-  // fetch journals for dropdown
   React.useEffect(() => {
     const fetchJournals = async () => {
       try {
@@ -48,7 +45,6 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
     fetchJournals();
   }, []);
 
-  // update search when values change
   const updateSearch = React.useCallback(() => {
     const params = new URLSearchParams();
 
@@ -61,7 +57,6 @@ export default function SearchBar({ onSearch, loading = false }: SearchBarProps)
     onSearch(params);
   }, [searchValue, journalValue, sortValue, dateRange, onSearch]);
 
-  // debounce search updates
   React.useEffect(() => {
     const timeoutId = setTimeout(() => {
       updateSearch();

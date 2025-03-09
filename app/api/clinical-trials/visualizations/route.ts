@@ -1,4 +1,3 @@
-// app/api/clinical-trials/visualizations/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
@@ -20,7 +19,6 @@ async function getVisualizedData(
 ): Promise<ChartData[]> {
   let data: ChartData[] = [];
   
-  // Build the base where clause
   const baseWhere: any = {
     ...(Object.keys(dateFilter).length > 0 && { startDate: dateFilter }),
     ...(drugId && { drugId })
@@ -28,7 +26,6 @@ async function getVisualizedData(
 
   switch (type) {
     case 'phases':
-      // Group trials by phase
       const phaseData = await prisma.clinicalTrial.groupBy({
         by: ['phase'],
         where: baseWhere,
@@ -39,11 +36,10 @@ async function getVisualizedData(
 
       data = phaseData
         .map(item => ({
-          name: item.phase || 'Not Specified', // Handle null phases
+          name: item.phase || 'Not Specified', 
           value: item._count.id
         }))
         .sort((a, b) => {
-          // Custom sort for phases
           const phaseOrder: Record<string, number> = {
             'Phase 1': 1,
             'Phase 1/2': 2,
@@ -61,7 +57,6 @@ async function getVisualizedData(
       break;
 
     case 'status':
-      // Group trials by status
       const statusData = await prisma.clinicalTrial.groupBy({
         by: ['status'],
         where: baseWhere,
@@ -72,7 +67,7 @@ async function getVisualizedData(
 
       data = statusData
         .map(item => ({
-          name: item.status || 'Unknown', // Handle null status
+          name: item.status || 'Unknown',
           value: item._count.id
         }))
         .sort((a, b) => b.value - a.value)
@@ -80,7 +75,6 @@ async function getVisualizedData(
       break;
 
     case 'sponsors':
-      // Group trials by sponsor
       const sponsorData = await prisma.clinicalTrial.groupBy({
         by: ['sponsor'],
         where: baseWhere,
@@ -91,7 +85,7 @@ async function getVisualizedData(
 
       data = sponsorData
         .map(item => ({
-          name: item.sponsor || 'Unknown Sponsor', // Handle null sponsors
+          name: item.sponsor || 'Unknown Sponsor', 
           value: item._count.id
         }))
         .sort((a, b) => b.value - a.value)
@@ -99,12 +93,11 @@ async function getVisualizedData(
       break;
 
     case 'timeline':
-      // Group trials by month/year
       const trialsByDate = await prisma.clinicalTrial.findMany({
         where: {
           ...baseWhere,
           startDate: {
-            not: null, // Ensure startDate is not null
+            not: null, 
           }
         },
         select: {
@@ -130,7 +123,6 @@ async function getVisualizedData(
       break;
 
     case 'conditions':
-      // Get trials with conditions
       const trialsWithConditions = await prisma.clinicalTrial.findMany({
         where: baseWhere,
         select: {
@@ -141,7 +133,7 @@ async function getVisualizedData(
       const conditionCounts = new Map<string, number>();
       trialsWithConditions.forEach(trial => {
         (trial.conditions || []).forEach(condition => {
-          if (condition) { // Skip null or empty conditions
+          if (condition) { 
             conditionCounts.set(condition, (conditionCounts.get(condition) || 0) + 1);
           }
         });

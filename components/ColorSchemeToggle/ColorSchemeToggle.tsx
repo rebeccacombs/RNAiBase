@@ -9,7 +9,6 @@ export function ColorSchemeToggle() {
 
   return (
     <>
-      {/* Desktop view with text buttons */}
       <Box className={classes.desktopOnly}>
         <Stack gap="xs" align="center">
           <Button
@@ -52,8 +51,6 @@ export function ColorSchemeToggle() {
           </ActionIcon>
         </Stack>
       </Box>
-
-      {/* Mobile view with icon buttons */}
       <Box className={classes.mobileOnly}>
         <Group gap="xs">
           <ActionIcon

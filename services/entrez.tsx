@@ -1,6 +1,5 @@
 'use server';
 
-//import getIDsAndData, { buildQuery } from '@rebeccacombs/pubmed-fetch';
 import prisma from '@/lib/db';
 import getIDsAndData, { buildQuery } from './test';
 

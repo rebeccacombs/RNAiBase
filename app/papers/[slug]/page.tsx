@@ -1,24 +1,23 @@
-//app / papers / [slug] / page.tsx
 'use client';
 
 import React from 'react';
-import {
-  Container,
-  Title,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Stack,
-  Button,
-  Grid,
-  Card,
-  LoadingOverlay,
-  rem,
-} from '@mantine/core';
-import { IconCalendar, IconLink, IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { IconArrowLeft, IconCalendar, IconLink } from '@tabler/icons-react';
+import {
+  Badge,
+  Button,
+  Card,
+  Container,
+  Grid,
+  Group,
+  LoadingOverlay,
+  Paper,
+  rem,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import type { Paper as PaperType } from '@/services/papers';
 
 const BackButton = () => {
@@ -95,18 +94,14 @@ export default function PaperDetail({ params }: { params: Promise<{ slug: string
 
         <Paper shadow="sm" p="xl" withBorder>
           <Stack gap="lg">
-            {/* header */}
             <Group justify="space-between" align="flex-start">
               <Title order={2}>{paper.title}</Title>
               <Badge size="lg">PMID: {paper.PMID}</Badge>
             </Group>
 
-            {/* meta info */}
             <Group>
               <Badge
-                leftSection={
-                  <IconCalendar style={{ width: rem(14), height: rem(14) }} />
-                }
+                leftSection={<IconCalendar style={{ width: rem(14), height: rem(14) }} />}
                 variant="light"
               >
                 {new Date(paper.pub_date).toLocaleDateString()}
@@ -116,7 +111,6 @@ export default function PaperDetail({ params }: { params: Promise<{ slug: string
               </Badge>
             </Group>
 
-            {/* keywords */}
             <Group>
               {paper.keywords.map((keyword) => (
                 <Badge key={keyword} variant="outline">
@@ -125,9 +119,7 @@ export default function PaperDetail({ params }: { params: Promise<{ slug: string
               ))}
             </Group>
 
-            {/* content grid */}
             <Grid>
-              {/* abstract */}
               <Grid.Col span={{ base: 12, md: 8 }}>
                 <Card withBorder padding="lg">
                   <Stack gap="md">
@@ -137,10 +129,8 @@ export default function PaperDetail({ params }: { params: Promise<{ slug: string
                 </Card>
               </Grid.Col>
 
-              {/* details */}
               <Grid.Col span={{ base: 12, md: 4 }}>
                 <Stack gap="md">
-                  {/* authors */}
                   <Card withBorder padding="lg">
                     <Stack gap="xs">
                       <Title order={4}>Authors</Title>
@@ -152,7 +142,6 @@ export default function PaperDetail({ params }: { params: Promise<{ slug: string
                     </Stack>
                   </Card>
 
-                  {/* affiliations */}
                   <Card withBorder padding="lg">
                     <Stack gap="xs">
                       <Title order={4}>Affiliations</Title>
@@ -163,16 +152,12 @@ export default function PaperDetail({ params }: { params: Promise<{ slug: string
                       ))}
                     </Stack>
                   </Card>
-
-                  {/* external Link */}
                   <Button
                     component="a"
                     href={paper.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    leftSection={
-                      <IconLink style={{ width: rem(16), height: rem(16) }} />
-                    }
+                    leftSection={<IconLink style={{ width: rem(16), height: rem(16) }} />}
                     variant="light"
                     fullWidth
                   >

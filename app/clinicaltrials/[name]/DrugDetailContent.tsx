@@ -1,6 +1,5 @@
 'use client';
 
-// app/clinicaltrials/[name]/DrugDetailContent.tsx
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -21,7 +20,6 @@ import {
 } from '@mantine/core';
 import { useWindowScroll } from '@mantine/hooks';
 
-// Type definitions
 interface ClinicalTrial {
   id: string;
   nctId: string;
@@ -53,12 +51,10 @@ interface DrugDetailContentProps {
   drug: RNAiDrug;
 }
 
-// Helper function to capitalize drug names
 function capitalizeWords(str: string): string {
   return str.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-// Status color mapping function with hex values
 function getStatusColor(status: string): string {
   const statusMap: Record<string, string> = {
     RECRUITING: '#2563EB',
@@ -104,7 +100,6 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
   const [scroll, scrollTo] = useWindowScroll();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Function to load more trials
   const loadMoreTrials = async () => {
     if (isLoadingMore || !hasMore) return;
 
@@ -116,7 +111,7 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
       if (data.trials.length > 0) {
         setTrials((prevTrials) => [...prevTrials, ...data.trials]);
         setSkip(skip + data.trials.length);
-        setHasMore(data.trials.length === 10); // Assume there are more if we got a full page
+        setHasMore(data.trials.length === 10);
       } else {
         setHasMore(false);
       }
@@ -127,44 +122,33 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
     }
   };
 
-  // Add an effect to handle fragment navigation
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash;
       if (hash && hash.startsWith('#trial-')) {
-        // Give time for the DOM to be fully loaded
         const scrollToElement = () => {
           const element = document.getElementById(hash.substring(1));
           if (element) {
-            // Scroll the element into view with smooth behavior
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            // Highlight effect
             element.style.transition = 'background-color 1s ease';
-            element.style.backgroundColor = '#f0f9ff'; // Light blue background
+            element.style.backgroundColor = '#f0f9ff';
             setTimeout(() => {
               element.style.backgroundColor = '';
-            }, 2000); // Remove highlight after 2 seconds
+            }, 2000);
           } else {
-            // If element not found yet, try again in a short while
             setTimeout(scrollToElement, 100);
           }
         };
-
-        // Wait for DOM to be ready
         setTimeout(scrollToElement, 500);
       }
     }
   }, [trials]);
 
-  // Scroll to top function
   const scrollToTop = () => {
     containerRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // Using scrollTo as a fallback
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Capitalize the drug name for display
   const displayName = capitalizeWords(drug.name);
 
   return (
@@ -184,7 +168,6 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
           <Title order={1}>{displayName}</Title>
         </div>
 
-        {/* Drug Information Card */}
         <Paper shadow="sm" p="lg" withBorder>
           <Stack gap="md">
             <Title order={2}>Drug Information</Title>
@@ -242,10 +225,7 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
           {trials.map((trial) => (
             <Paper key={trial.id} id={`trial-${trial.nctId}`} shadow="sm" p="lg" withBorder>
               <Stack gap="md">
-                {/* Title in its own section */}
                 <Title order={3}>{trial.title}</Title>
-
-                {/* Status and phase in their own row */}
                 <Group gap="xs">
                   <Badge
                     style={{
@@ -397,7 +377,6 @@ export default function DrugDetailContent({ drug }: DrugDetailContentProps) {
         </Stack>
       </Stack>
 
-      {/* Jump to top button */}
       <Affix position={{ bottom: 20, right: 20 }}>
         <Transition transition="slide-up" mounted={scroll.y > 300}>
           {(transitionStyles) => (

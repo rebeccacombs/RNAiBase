@@ -15,7 +15,7 @@ const ret = getIDsAndData(query, 120, api_key, true);
 console.log(ret)
 */
 
-// paper data object
+//paper data object
 type PaperData = {
   PMID: number;
   title: string;
@@ -29,7 +29,7 @@ type PaperData = {
   affiliations: string[];
 };
 
-// main: query of interested paper topics -> prepped data
+//main: query of interested paper topics -> prepped data
 export default async function getIDsAndData(
   query: string,
   numPapers: number,
@@ -54,7 +54,7 @@ export default async function getIDsAndData(
   }
 }
 
-// getting PMIDs based on query
+//getting PMIDs based on query
 export async function fetchIDs(
   query: string,
   num: number,
@@ -76,14 +76,14 @@ export async function fetchIDs(
       return idList;
     } catch (error) {
       console.error(`Error searching IDs, attempt ${attempt + 1}/3. Trying again.`);
-      await delay(1000 * Math.pow(2, attempt)); // Exponential backoff
+      await delay(1000 * Math.pow(2, attempt)); 
       console.error(error);
     }
   }
   return idList;
 }
 
-// getting raw paper data based on PMIDs
+//getting raw paper data based on PMIDs
 export async function fetchData(
   id_list: any,
   api_key: string | undefined,
@@ -112,7 +112,7 @@ export async function fetchData(
   }
 }
 
-// formatting raw paper data with interested fields
+//formatting raw paper data with interested fields
 export async function processData(data: any): Promise<Array<PaperData>> {
   try {
     const pData = data.PubmedArticleSet.PubmedArticle.map((article: any) => {
@@ -141,21 +141,21 @@ export async function processData(data: any): Promise<Array<PaperData>> {
           article.MedlineCitation.Article.AuthorList.Author,
           articleError
         );
-        return null; // skip or return a fallback structure
+        return null; //skip or return a fallback structure
       }
-    }).filter((article: any) => article !== null); // remove any null articles
+    }).filter((article: any) => article !== null); //remove any null articles
     return pData;
   } catch (error) {
     console.error('Error processing data:', error);
 
-    return []; // return empty array in case of failure
+    return []; //return empty array in case of failure
   }
 }
 
-// helper functions for cleaning raw paper data
+//helper functions for cleaning raw paper data
 const dataTools = {
   getPMID(entry: any): number {
-    // entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.PMID._
+    //entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.PMID._
     return Number(entry);
   },
   getSlug(title: any): string {
@@ -184,7 +184,6 @@ const dataTools = {
           ForeName?: { _: string };
         }) => {
           try {
-            // Handle CollectiveName case
             if (author?.CollectiveName) {
               return author?.CollectiveName._.trim();
             }
@@ -195,22 +194,21 @@ const dataTools = {
             if (lastName && foreName) {
               return `${lastName} ${foreName}`;
             } else if (lastName) {
-              return lastName; // Only return last name if fore name is missing
+              return lastName; 
             } else if (foreName) {
-              return foreName; // Only return fore name if last name is missing
+              return foreName; 
             }
           } catch (authorError) {
             console.error('Error processing author:', author, authorError);
           }
-          return null; // Return null if author could not be processed
+          return null; 
         }
       )
-      .filter((name: string | null) => name !== null); // Filter out null names
+      .filter((name: string | null) => name !== null); 
 
     return authors;
   },
   getDate(entry: any): string {
-    //entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.Article.Journal.JournalIssue.PubDate
     if (entry.Year && entry.Year._) {
       const year = entry.Year._;
       const month = (entry.Month && entry.Month._) || 'Jan';
@@ -221,7 +219,6 @@ const dataTools = {
     }
   },
   getKeywords(entry: any): string[] {
-    //entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.KeywordList.Keyword
     if (entry.KeywordList) {
       const keywords = entry.KeywordList.Keyword.map((keyword: { _: string }) => {
         const k = keyword._ || '';
@@ -232,7 +229,6 @@ const dataTools = {
     return [];
   },
   getAffiliations(entry: any): string[] {
-    // entry = data.PubmedArticleSet.PubmedArticle[IDX].MedlineCitation.Article.AuthorList.Author
     const affiliations = new Set<string>();
     for (const author of entry) {
       if (author?.AffiliationInfo && author.AffiliationInfo.Affiliation) {
@@ -247,7 +243,6 @@ const dataTools = {
   },
 };
 
-// building the query string based on user input
 export function buildQuery(authors: string[], topics: string[], dateRange: string): string {
   let queries: string[] = [];
 
@@ -263,7 +258,6 @@ export function buildQuery(authors: string[], topics: string[], dateRange: strin
   return queries.join(' AND ') + ' AND ' + dateRange;
 }
 
-// error retry timer
 async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

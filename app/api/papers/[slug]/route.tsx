@@ -1,10 +1,8 @@
-// app/api/papers/[slug]/route.tsx
 import { NextRequest, NextResponse } from 'next/server';
 import { getPaper } from '@/services/papers';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    // Await params before using its properties
     const resolvedParams = await params;
     const paper = await getPaper(resolvedParams.slug);
 

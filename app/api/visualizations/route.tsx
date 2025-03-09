@@ -1,4 +1,3 @@
-// app/api/visualizations/route.tsx
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
@@ -22,23 +21,27 @@ interface Paper {
   slug: string;
 }
 
-async function getVisualizedData(type: string, limit: number, dateFilter: DateFilter = {}): Promise<ChartData[]> {
+async function getVisualizedData(
+  type: string,
+  limit: number,
+  dateFilter: DateFilter = {}
+): Promise<ChartData[]> {
   let data: ChartData[] = [];
 
   switch (type) {
     case 'keywords':
       const papers = await prisma.paper.findMany({
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         select: {
-          keywords: true
-        }
+          keywords: true,
+        },
       });
 
       const keywordCounts = new Map<string, number>();
-      papers.forEach(paper => {
-        paper.keywords.forEach(keyword => {
+      papers.forEach((paper) => {
+        paper.keywords.forEach((keyword) => {
           keywordCounts.set(keyword, (keywordCounts.get(keyword) || 0) + 1);
         });
       });
@@ -53,17 +56,17 @@ async function getVisualizedData(type: string, limit: number, dateFilter: DateFi
       const journalCounts = await prisma.paper.groupBy({
         by: ['journal'],
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         _count: {
-          journal: true
-        }
+          journal: true,
+        },
       });
 
       data = journalCounts
-        .map(item => ({
+        .map((item) => ({
           name: item.journal,
-          value: item._count.journal
+          value: item._count.journal,
         }))
         .sort((a, b) => b.value - a.value)
         .slice(0, limit);
@@ -72,16 +75,16 @@ async function getVisualizedData(type: string, limit: number, dateFilter: DateFi
     case 'authors':
       const authorPapers = await prisma.paper.findMany({
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         select: {
-          authors: true
-        }
+          authors: true,
+        },
       });
 
       const authorCounts = new Map<string, number>();
-      authorPapers.forEach(paper => {
-        paper.authors.forEach(author => {
+      authorPapers.forEach((paper) => {
+        paper.authors.forEach((author) => {
           authorCounts.set(author, (authorCounts.get(author) || 0) + 1);
         });
       });
@@ -95,18 +98,18 @@ async function getVisualizedData(type: string, limit: number, dateFilter: DateFi
     case 'timeline':
       const timelinePapers = await prisma.paper.findMany({
         where: {
-          pub_date: dateFilter
+          pub_date: dateFilter,
         },
         select: {
-          pub_date: true
+          pub_date: true,
         },
         orderBy: {
-          pub_date: 'asc'
-        }
+          pub_date: 'asc',
+        },
       });
 
       const timelineCounts = new Map<string, number>();
-      timelinePapers.forEach(paper => {
+      timelinePapers.forEach((paper) => {
         const date = paper.pub_date;
         const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         timelineCounts.set(key, (timelineCounts.get(key) || 0) + 1);
@@ -137,37 +140,37 @@ async function getRelatedPapers(type: string, value: string): Promise<Paper[]> {
       return await prisma.paper.findMany({
         where: {
           keywords: {
-            has: value
-          }
+            has: value,
+          },
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
 
     case 'journals':
       return await prisma.paper.findMany({
         where: {
-          journal: value
+          journal: value,
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
 
     case 'authors':
       return await prisma.paper.findMany({
         where: {
           authors: {
-            has: value
-          }
+            has: value,
+          },
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
 
     case 'timeline':
@@ -179,13 +182,13 @@ async function getRelatedPapers(type: string, value: string): Promise<Paper[]> {
         where: {
           pub_date: {
             gte: startDate,
-            lte: endDate
-          }
+            lte: endDate,
+          },
         },
         select,
         orderBy: {
-          pub_date: 'desc'
-        }
+          pub_date: 'desc',
+        },
       });
 
     default:
@@ -195,7 +198,7 @@ async function getRelatedPapers(type: string, value: string): Promise<Paper[]> {
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  
+
   const type = searchParams.get('type');
   const limit = parseInt(searchParams.get('limit') || '50');
   const startDate = searchParams.get('startDate');
@@ -203,10 +206,7 @@ export async function GET(request: NextRequest) {
   const selectedValue = searchParams.get('value');
 
   if (!type) {
-    return NextResponse.json(
-      { error: 'Missing visualization type' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Missing visualization type' }, { status: 400 });
   }
 
   try {
@@ -222,18 +222,11 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ data, papers });
-
   } catch (error) {
     console.error('API Error:', error);
     if (error instanceof Error && error.message === 'Invalid visualization type') {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

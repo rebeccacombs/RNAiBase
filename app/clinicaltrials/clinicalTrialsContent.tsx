@@ -1,12 +1,10 @@
 'use client';
 
-// app/clinicaltrials/ClinicalTrialsContent.tsx
 import { useState } from 'react';
 import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Box, Button, Container, Group, Paper, Stack, Text, Title } from '@mantine/core';
 
-// Type definitions
 interface RNAiDrugSummary {
   id: string;
   name: string;
@@ -17,14 +15,11 @@ interface ClinicalTrialsContentProps {
   drugs: RNAiDrugSummary[];
 }
 
-// Helper function to capitalize drug names
 function capitalizeWords(str: string): string {
   return str.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-// Client component that receives data as props
 export default function ClinicalTrialsContent({ drugs }: ClinicalTrialsContentProps) {
-  // Track which drug card is being hovered
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
 
   return (
@@ -43,7 +38,6 @@ export default function ClinicalTrialsContent({ drugs }: ClinicalTrialsContentPr
           <Title order={1}>RNAi Therapeutic Drugs</Title>
         </span>
 
-        {/* Using a flex container instead of grid for more control */}
         <div className="flex flex-wrap gap-8">
           {drugs.map((drug) => {
             const isHovered = hoveredCardId === drug.id;
